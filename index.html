@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aura Salud — Atención Médica y Clínica a Domicilio en Chile</title>
+  <meta name="description" content="Salud profesional a tu puerta en minutos. Médicos generales, enfermería, kinesiología, exámenes de laboratorio y ambulancias a domicilio. Cobertura Fonasa e Isapres.">
+  <meta name="keywords" content="médico a domicilio, enfermería a domicilio, kinesiología, exámenes de sangre en casa, telemedicina, salud chile, fonasa, isapre, ambulancia programada">
+  
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://aura-salud.vercel.app/">
+  <meta property="og:title" content="Aura Salud — Salud profesional en tu hogar">
+  <meta property="og:description" content="Atención médica general, enfermería, kinesiología y exámenes a domicilio en Santiago y Regiones.">
+  <meta property="og:image" content="/assets/screens/03_inicio_catalogo_servicios.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/src/css/index.css">
+  <link rel="stylesheet" href="/src/css/hero.css">
+  <link rel="stylesheet" href="/src/css/services.css">
+  <link rel="stylesheet" href="/src/css/showcase.css">
+  <link rel="stylesheet" href="/src/css/pricing.css">
+  <link rel="stylesheet" href="/src/css/coverage.css">
+  <link rel="stylesheet" href="/src/css/modals.css">
+</head>
+<body>
+
+  <!-- Ambient Aurora Glow Orbs -->
+  <div class="aurora-bg">
+    <div class="aurora-orb orb-1"></div>
+    <div class="aurora-orb orb-2"></div>
+    <div class="aurora-orb orb-3"></div>
+  </div>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-banner">
+    <span class="live-dot"></span>
+    <span><strong>Médicos y enfermeros en ruta:</strong> Disponibilidad inmediata en Región Metropolitana · Tiempo promedio 35 min</span>
+    <span style="opacity: 0.6; margin: 0 4px;">|</span>
+    <span>¿Riesgo vital? Llama al <strong>SAMU 131</strong></span>
+  </div>
+
+  <!-- Header & Navigation -->
+  <header class="site-header">
+    <div class="container navbar">
+      <a href="#" class="brand-logo">
+        <img src="/assets/brand/logo.png" alt="Aura Salud Logo" onerror="this.src='/favicon.svg'">
+        <span>Aura<span style="color: var(--primary-400);">Salud</span></span>
+        <span class="brand-badge">Chile</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#como-funciona">Cómo Funciona</a></li>
+          <li><a href="#pantallas-app">App en Vivo</a></li>
+          <li><a href="#planes">Planes</a></li>
+          <li><a href="#cobertura">Cobertura</a></li>
+          <li><a href="#profesionales">Profesionales</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-primary btn-sm" data-open-booking>
+          Pedir Atención
+        </button>
+        <button class="mobile-menu-toggle" aria-label="Abrir menú">
+          ☰
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==========================================================================
+         Hero Section
+         ========================================================================== -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-grid">
+          
+          <!-- Hero Text Content -->
+          <div class="hero-content">
+            <div class="hero-live-pill">
+              <span class="live-dot"></span>
+              <span>+40 Profesionales de salud activos hoy en Santiago</span>
+            </div>
+
+            <h1 class="hero-title">
+              Salud profesional a tu puerta <span class="gradient-text">en minutos</span>, no en horas
+            </h1>
+
+            <p class="hero-description">
+              Médicos generales, enfermería, kinesiología, exámenes de laboratorio y ambulancias programadas directamente en tu hogar. Sin salas de espera, con receta digital inmediata y reembolso en tu Isapre o Fonasa.
+            </p>
+
+            <div class="hero-cta-group">
+              <button class="btn btn-primary btn-lg" data-open-booking data-service-id="medico">
+                Solicitar Atención Médica
+              </button>
+              <a href="#servicios" class="btn btn-secondary btn-lg">
+                Ver Catálogo de Servicios
+              </a>
+            </div>
+
+            <div class="hero-stats">
+              <div class="stat-item">
+                <span class="stat-number" data-count="15000">+15.000</span>
+                <span class="stat-label">Atenciones realizadas con éxito</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">4.9 / 5.0</span>
+                <span class="stat-label">Calificación de satisfacción</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">&lt; 45 min</span>
+                <span class="stat-label">Tiempo promedio de llegada</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero 3D Interactive Phone Mockup -->
+          <div class="hero-mockup-wrapper">
+            
+            <!-- Floating Badge Top Left -->
+            <div class="floating-chip chip-top-left">
+              <div class="chip-icon chip-icon-teal">👨‍⚕️</div>
+              <div class="chip-info">
+                <span class="chip-title">Dra. Camila Rivera en camino</span>
+                <span class="chip-subtitle">ETA estimado: 18 minutos</span>
+              </div>
+            </div>
+
+            <!-- Floating Badge Bottom Right -->
+            <div class="floating-chip chip-bottom-right">
+              <div class="chip-icon chip-icon-emerald">✓</div>
+              <div class="chip-info">
+                <span class="chip-title">Receta Electrónica Emitida</span>
+                <span class="chip-subtitle">Válida en todas las farmacias</span>
+              </div>
+            </div>
+
+            <!-- The Smartphone Frame -->
+            <div class="phone-device-container">
+              <div class="phone-notch">
+                <div class="phone-camera"></div>
+              </div>
+
+              <div class="phone-screen">
+                <img src="/assets/screens/03_inicio_catalogo_servicios.png" alt="Catálogo de Servicios Aura" class="phone-screen-img active" id="hero-screen-0">
+                <img src="/assets/screens/06_seguimiento_en_vivo_mapa.png" alt="Seguimiento GPS en vivo" class="phone-screen-img" id="hero-screen-1">
+                <img src="/assets/screens/07_chat_medico_paciente.png" alt="Chat con el Doctor" class="phone-screen-img" id="hero-screen-2">
+                <img src="/assets/screens/11_examenes_laboratorio.png" alt="Exámenes de Laboratorio" class="phone-screen-img" id="hero-screen-3">
+              </div>
+            </div>
+
+            <!-- Phone Screen Switcher Tabs -->
+            <div class="phone-switcher-nav">
+              <button class="phone-tab-btn active">Inicio</button>
+              <button class="phone-tab-btn">GPS en Vivo</button>
+              <button class="phone-tab-btn">Chat Médico</button>
+              <button class="phone-tab-btn">Exámenes</button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         Trust & Coverage Bar
+         ========================================================================== -->
+    <section class="trust-bar">
+      <div class="container">
+        <div class="trust-title">Respaldo y Convenios de Reembolso</div>
+        <div class="trust-badges">
+          <div class="trust-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Prestadores Acreditados SuperSalud</span>
+          </div>
+          <div class="trust-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></svg>
+            <span>Boleta Reembolsable en Isapres y Fonasa</span>
+          </div>
+          <div class="trust-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+            <span>Pagos Seguros Webpay Plus y MercadoPago</span>
+          </div>
+          <div class="trust-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+            <span>Ficha Médica Cifrada HIPAA Compliant</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         How It Works Section
+         ========================================================================== -->
+    <section id="como-funciona" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Flujo Simple y Transparente</div>
+          <h2 class="section-title">¿Cómo funciona <span class="gradient-text">Aura Salud</span>?</h2>
+          <p class="section-subtitle">Diseñado para que recibas atención médica de primer nivel en la comodidad de tu casa en cuatro sencillos pasos.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
+          
+          <div class="glass-card">
+            <div style="font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; color: var(--primary-400); margin-bottom: 12px;">01</div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Elige tu atención</h3>
+            <p style="font-size: 0.9rem;">Selecciona el servicio que requieres (médico, enfermería, kine o exámenes) para ti o un familiar y describe tus síntomas.</p>
+          </div>
+
+          <div class="glass-card">
+            <div style="font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; color: var(--primary-400); margin-bottom: 12px;">02</div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Despacho Inteligente</h3>
+            <p style="font-size: 0.9rem;">El sistema asigna al profesional más cercano. Sigue su ruta y tiempo estimado de llegada en el mapa satelital en vivo.</p>
+          </div>
+
+          <div class="glass-card">
+            <div style="font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; color: var(--primary-400); margin-bottom: 12px;">03</div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Atención en tu hogar</h3>
+            <p style="font-size: 0.9rem;">El profesional acreditado llega con todo el equipamiento clínico necesario para examinarte con tranquilidad y calidez.</p>
+          </div>
+
+          <div class="glass-card">
+            <div style="font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; color: var(--primary-400); margin-bottom: 12px;">04</div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Receta y Reembolso</h3>
+            <p style="font-size: 0.9rem;">Recibe tu receta médica electrónica, licencia y boleta digital de inmediato en tu celular para reembolso en tu Isapre.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         Clinical Services Catalog
+         ========================================================================== -->
+    <section id="servicios" class="section" style="background: rgba(13, 22, 31, 0.4);">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Catálogo Clínico</div>
+          <h2 class="section-title">Prestaciones Médicas <span class="gradient-text">a Domicilio</span></h2>
+          <p class="section-subtitle">Tarifas transparentes en pesos chilenos (CLP), tiempos de arribo garantizados y profesionales certificados por el MINSAL.</p>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="services-filter-nav">
+          <button class="filter-btn active" data-category="all">Todos los Servicios</button>
+          <button class="filter-btn" data-category="medico">🩺 Médico General</button>
+          <button class="filter-btn" data-category="enfermeria">💉 Enfermería & TENS</button>
+          <button class="filter-btn" data-category="kinesiologia">🏃 Kinesiología</button>
+          <button class="filter-btn" data-category="laboratorio">🧪 Exámenes & Rayos X</button>
+          <button class="filter-btn" data-category="cuidados">🚑 Cuidados & Ambulancia</button>
+        </div>
+
+        <!-- Services Dynamic Grid -->
+        <div class="services-grid" id="services-grid">
+          <!-- Populated by src/js/app.js -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         App Screens Showcase
+         ========================================================================== -->
+    <section id="pantallas-app" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Tecnología de Vanguardia</div>
+          <h2 class="section-title">Explora la Plataforma <span class="gradient-text">Aura Salud</span></h2>
+          <p class="section-subtitle">Conoce las 18 pantallas de nuestra aplicación móvil nativa y paneles clínicos en tiempo real.</p>
+        </div>
+
+        <!-- Showcase Role Tabs -->
+        <div class="showcase-role-nav">
+          <button class="showcase-tab-btn active" data-role="all">Todas (18)</button>
+          <button class="showcase-tab-btn" data-role="paciente">App Paciente</button>
+          <button class="showcase-tab-btn" data-role="profesional">Portal Médico</button>
+          <button class="showcase-tab-btn" data-role="admin">Despacho & Admin</button>
+        </div>
+
+        <!-- Showcase Grid -->
+        <div class="showcase-grid" id="showcase-grid">
+          <!-- Populated by src/js/showcase.js -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         Subscription Plans Section
+         ========================================================================== -->
+    <section id="planes" class="section" style="background: rgba(13, 22, 31, 0.4);">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Salud Continua para tu Familia</div>
+          <h2 class="section-title">Planes de Suscripción <span class="gradient-text">Aura</span></h2>
+          <p class="section-subtitle">Atenciones domiciliarias incluidas cada mes, telemedicina 24/7 y descuentos exclusivos en laboratorio para ti y tus dependientes.</p>
+        </div>
+
+        <!-- Monthly / Annual Toggle -->
+        <div class="pricing-toggle-wrap">
+          <span class="pricing-toggle-label active" id="label-monthly">Pago Mensual</span>
+          <div class="pricing-switch" id="pricing-switch">
+            <div class="pricing-switch-thumb"></div>
+          </div>
+          <span class="pricing-toggle-label" id="label-annual">Pago Anual</span>
+          <span class="save-badge">🎁 2 Meses Gratis</span>
+        </div>
+
+        <!-- Pricing Grid -->
+        <div class="pricing-grid" id="pricing-grid">
+          <!-- Populated by src/js/app.js -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         Coverage Checker Section
+         ========================================================================== -->
+    <section id="cobertura" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Zonas de Atención</div>
+          <h2 class="section-title">Verifica la Cobertura en tu <span class="gradient-text">Comuna</span></h2>
+          <p class="section-subtitle">Consulta la disponibilidad de flota médica y tiempos estimados de arribo en tiempo real.</p>
+        </div>
+
+        <div class="coverage-wrapper">
+          <div>
+            <h3 style="font-size: 1.3rem; margin-bottom: 12px;">Buscador de Disponibilidad</h3>
+            <p style="font-size: 0.95rem; margin-bottom: 20px;">Escribe el nombre de tu comuna para ver el estado de despacho y tiempo de respuesta:</p>
+
+            <div class="coverage-search-box">
+              <div class="coverage-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="coverage-search-input" class="coverage-input" placeholder="Ej. Providencia, Las Condes, Ñuñoa, Maipú...">
+              </div>
+            </div>
+
+            <div class="coverage-results-list" id="coverage-results-container">
+              <!-- Populated by src/js/coverage.js -->
+            </div>
+          </div>
+
+          <div class="coverage-hub-card">
+            <span class="hub-badge">🇨🇱 Red Médica Nacional</span>
+            <h3 class="hub-title">Despacho Central Santiago & Regiones</h3>
+            <p class="hub-desc">Nuestra central monitorea la ubicación y disponibilidad del personal médico con algoritmos de ruteo óptimo para llegar a tu puerta en el menor tiempo posible.</p>
+
+            <div class="hub-metrics">
+              <div>
+                <div class="hub-metric-val">&lt; 35 min</div>
+                <div class="hub-metric-label">Tiempo promedio zona oriente</div>
+              </div>
+              <div>
+                <div class="hub-metric-val">24/7</div>
+                <div class="hub-metric-label">Telemedicina y triage continuo</div>
+              </div>
+            </div>
+
+            <div style="margin-top: 24px;">
+              <button class="btn btn-primary" style="width: 100%;" data-open-booking>
+                Verificar Mi Dirección Exacta
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         For Healthcare Professionals Section
+         ========================================================================== -->
+    <section id="profesionales" class="section" style="background: rgba(13, 22, 31, 0.4);">
+      <div class="container">
+        <div class="glass-card" style="padding: 50px 40px; border: 1px solid var(--border-active);">
+          <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center;">
+            <div>
+              <span class="section-tag" style="background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan);">Trabaja con Nosotros</span>
+              <h2 style="font-size: 2.2rem; margin-bottom: 16px;">¿Eres Médico, Enfermero o Kinesiólogo?</h2>
+              <p style="font-size: 1.05rem; line-height: 1.6; margin-bottom: 24px;">
+                Únete a la red de salud domiciliaria más moderna de Chile. Elige tus horarios, recibe pacientes geolocalizados cerca de ti, gestiona fichas y recetas 100% digitales y obtén pagos semanales garantizados.
+              </p>
+              <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+                <a href="https://wa.me/56912345678?text=Hola%20Aura%20Salud%2C%20soy%20profesional%20de%20la%20salud%20y%20deseo%20postular" target="_blank" class="btn btn-primary">
+                  Postular como Profesional
+                </a>
+                <a href="#pantallas-app" class="btn btn-secondary">
+                  Ver Panel Médico
+                </a>
+              </div>
+            </div>
+            <div style="background: rgba(8, 14, 20, 0.7); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 24px;">
+              <h4 style="font-size: 1.1rem; margin-bottom: 16px; color: var(--primary-300);">Requisitos de Acreditación:</h4>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem;">
+                <li style="display: flex; align-items: center; gap: 8px;">✓ Título profesional acreditado en Chile</li>
+                <li style="display: flex; align-items: center; gap: 8px;">✓ Inscripción en el Registro Nacional de Prestadores (SuperSalud)</li>
+                <li style="display: flex; align-items: center; gap: 8px;">✓ EUNACOM aprobado (médicos titulados en el extranjero)</li>
+                <li style="display: flex; align-items: center; gap: 8px;">✓ Certificado de antecedentes para fines especiales</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         Testimonials Section
+         ========================================================================== -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Experiencias Reales</div>
+          <h2 class="section-title">Lo que dicen nuestras <span class="gradient-text">Familias</span></h2>
+          <p class="section-subtitle">Más de 15.000 hogares en Chile han confiado su salud y la de sus seres queridos en Aura.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px;" id="testimonials-grid">
+          <!-- Populated by src/js/app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FAQ Accordion Section
+         ========================================================================== -->
+    <section id="faq" class="section" style="background: rgba(13, 22, 31, 0.4);">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Dudas Frecuentes</div>
+          <h2 class="section-title">Preguntas <span class="gradient-text">Frecuentes</span></h2>
+          <p class="section-subtitle">Todo lo que necesitas saber sobre reembolsos, licencias, coberturas y seguridad médica.</p>
+        </div>
+
+        <div class="faq-accordion" id="faq-accordion">
+          <!-- Populated by src/js/app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         Bottom CTA Banner
+         ========================================================================== -->
+    <section class="section" style="padding-top: 40px;">
+      <div class="container">
+        <div class="glass-card" style="text-align: center; padding: 60px 30px; background: linear-gradient(180deg, rgba(13, 148, 136, 0.15) 0%, rgba(8, 14, 20, 0.9) 100%); border: 1px solid var(--border-active);">
+          <h2 style="font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 16px;">
+            Atención médica de calidad, sin moverte de casa
+          </h2>
+          <p style="font-size: 1.15rem; max-width: 600px; margin: 0 auto 32px; color: var(--text-secondary);">
+            Solicita tu médico general, enfermera o toma de muestras ahora mismo en Santiago y Regiones.
+          </p>
+          <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-lg" data-open-booking>
+              Solicitar Atención Ahora
+            </button>
+            <a href="https://wa.me/56912345678?text=Hola%20Aura%20Salud%2C%20tengo%20una%20consulta%20médica" target="_blank" class="btn btn-secondary btn-lg">
+              Hablar con Orientación Médica WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       Site Footer
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div class="footer-about">
+          <a href="#" class="brand-logo">
+            <img src="/assets/brand/logo.png" alt="Aura Salud" onerror="this.src='/favicon.svg'">
+            <span>Aura<span style="color: var(--primary-400);">Salud</span></span>
+          </a>
+          <p>Plataforma chilena de salud y telemedicina a domicilio. Conectamos pacientes con profesionales de la salud certificados en minutos.</p>
+          
+          <div class="emergency-alert-card">
+            <h5>⚠️ Aviso de Emergencia</h5>
+            <p>Aura Salud atiende cuadros no urgentes y semi-urgentes. Ante riesgo vital inminente, comuníquese de inmediato al <strong>131 (SAMU)</strong> o acuda a un servicio de urgencias.</p>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Prestaciones</h4>
+          <ul>
+            <li><a href="#servicios" data-open-booking data-service-id="medico">Médico a Domicilio</a></li>
+            <li><a href="#servicios" data-open-booking data-service-id="enfermeria">Procedimientos Enfermería</a></li>
+            <li><a href="#servicios" data-open-booking data-service-id="kine_respiratoria">Kinesiología Respiratoria</a></li>
+            <li><a href="#servicios" data-open-booking data-service-id="kine_motora">Kinesiología Motora</a></li>
+            <li><a href="#servicios" data-open-booking data-service-id="laboratorio">Toma de Muestras</a></li>
+            <li><a href="#servicios" data-open-booking data-service-id="ambulancia">Ambulancia Programada</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Plataforma</h4>
+          <ul>
+            <li><a href="#como-funciona">Cómo Funciona</a></li>
+            <li><a href="#pantallas-app">Vitrina de la App</a></li>
+            <li><a href="#planes">Planes Familiares</a></li>
+            <li><a href="#cobertura">Cobertura por Comunas</a></li>
+            <li><a href="#profesionales">Únete al Equipo Médico</a></li>
+            <li><a href="#faq">Preguntas Frecuentes</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Acreditación & Legal</h4>
+          <ul>
+            <li><span style="color: var(--text-secondary); font-size: 0.9rem;">Registro Prestadores SuperSalud</span></li>
+            <li><span style="color: var(--text-secondary); font-size: 0.9rem;">Cumplimiento Ley 20.584 (Derechos y Deberes)</span></li>
+            <li><span style="color: var(--text-secondary); font-size: 0.9rem;">Privacidad Cifrada Ley 19.628</span></li>
+            <li><a href="#">Términos y Condiciones</a></li>
+            <li><a href="#">Política de Privacidad</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Aura Salud SpA. Todos los derechos reservados. Santiago de Chile.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="#" style="color: var(--text-muted); text-decoration: none;">Privacidad</a>
+          <a href="#" style="color: var(--text-muted); text-decoration: none;">Términos</a>
+          <a href="#" style="color: var(--text-muted); text-decoration: none;">Contacto</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       Interactive 3-Step Booking Modal
+       ========================================================================== -->
+  <div class="modal-backdrop" id="booking-modal">
+    <div class="modal-container">
+      
+      <div class="modal-header">
+        <h3 class="modal-title">Solicitar Atención Médica</h3>
+        <button class="modal-close-btn" id="booking-modal-close" aria-label="Cerrar modal">&times;</button>
+      </div>
+
+      <div class="modal-steps-bar">
+        <div class="step-indicator active"></div>
+        <div class="step-indicator"></div>
+        <div class="step-indicator"></div>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- Step 1: Service & Recipient -->
+        <div class="step-pane active" id="step-1">
+          <div class="form-group">
+            <label class="form-label" for="booking-service-select">1. Selecciona el Servicio Requerido</label>
+            <select id="booking-service-select" class="form-select">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">2. ¿Para quién es la atención?</label>
+            <div class="form-radio-group">
+              <div class="radio-card radio-recipient selected" data-recipient="Para mí (Titular)">
+                <span>👤 Para mí</span>
+              </div>
+              <div class="radio-card radio-recipient" data-recipient="Para un Familiar / Dependiente">
+                <span>👨‍👩‍👦 Para un Familiar</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Location & Symptoms -->
+        <div class="step-pane" id="step-2">
+          <div class="form-group">
+            <label class="form-label" for="booking-comuna-select">Comuna de Atención</label>
+            <select id="booking-comuna-select" class="form-select">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="booking-address">Dirección (Calle, Número, Depto)</label>
+            <input type="text" id="booking-address" class="form-input" placeholder="Ej. Av. Providencia 1234, Depto 502">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="booking-symptoms">Descripción breve de síntomas o motivo</label>
+            <textarea id="booking-symptoms" class="form-textarea" rows="3" placeholder="Ej. Fiebre de 38.5°, dolor de garganta y malestar general desde ayer..."></textarea>
+          </div>
+        </div>
+
+        <!-- Step 3: Live Summary & Action -->
+        <div class="step-pane" id="step-3">
+          <div class="modal-summary-box">
+            <div class="summary-row">
+              <span>Prestación:</span>
+              <strong id="summary-service">Médico a Domicilio</strong>
+            </div>
+            <div class="summary-row">
+              <span>Paciente:</span>
+              <strong id="summary-recipient">Para mí (Titular)</strong>
+            </div>
+            <div class="summary-row">
+              <span>Ubicación:</span>
+              <strong id="summary-comuna">Las Condes</strong>
+            </div>
+            <div class="summary-row">
+              <span>Tiempo Estimado (ETA):</span>
+              <span class="service-eta-pill" id="summary-eta">⚡ 45 - 60 min</span>
+            </div>
+            <div class="summary-row total">
+              <span>Arancel Base:</span>
+              <span id="summary-price">$40.000 CLP</span>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--primary-300); margin-top: 4px;" id="summary-copay">
+              Aprox. $14.000 CLP (según plan Isapre/Fonasa con boleta reembolsable)
+            </div>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center;">
+            Al confirmar serás conectado con nuestra central clínica por WhatsApp o canal prioritario para validar el despacho.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" id="btn-step2-back" style="display: none;">Atrás</button>
+        <button class="btn btn-secondary btn-sm" id="btn-step3-back" style="display: none;">Atrás</button>
+        <div style="margin-left: auto;">
+          <button class="btn btn-primary btn-sm" id="btn-step1-next">Continuar →</button>
+          <button class="btn btn-primary btn-sm" id="btn-step2-next" style="display: none;">Ver Resumen →</button>
+          <button class="btn btn-primary btn-sm" id="btn-step3-finish" style="display: none;">Confirmar y Contactar WhatsApp 💬</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       App Showcase Lightbox Modal
+       ========================================================================== -->
+  <div class="lightbox-modal" id="lightbox-modal">
+    <div class="lightbox-content">
+      <button class="lightbox-close-btn" id="lightbox-close" aria-label="Cerrar">&times;</button>
+      <div class="lightbox-img-wrap">
+        <img src="" alt="Captura ampliada" id="lightbox-img">
+      </div>
+      <div class="lightbox-details">
+        <span class="screen-badge" id="lightbox-badge" style="width: fit-content; margin-bottom: 12px;">Módulo</span>
+        <h3 id="lightbox-title" style="font-size: 1.5rem; margin-bottom: 12px;">Detalle de Pantalla</h3>
+        <p id="lightbox-desc" style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px;">Descripción</p>
+        
+        <h4 style="font-size: 1rem; margin-bottom: 12px; color: var(--text-primary);">Puntos Destacados:</h4>
+        <ul id="lightbox-highlights" style="list-style: none; padding: 0;"></ul>
+
+        <div style="margin-top: auto; padding-top: 24px;">
+          <button class="btn btn-primary" data-open-booking style="width: 100%;">
+            Probar Servicio en la App
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       Floating WhatsApp Clinical Orientation Widget
+       ========================================================================== -->
+  <a href="https://wa.me/56912345678?text=Hola%20Aura%20Salud%2C%20necesito%20orientación%20médica" target="_blank" class="floating-whatsapp-btn" aria-label="Orientación médica por WhatsApp">
+    <svg class="whatsapp-icon" viewBox="0 0 24 24">
+      <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-5.46-4.45-9.92-9.91-9.92zM12.04 20.16c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31c-.82-1.31-1.26-2.83-1.26-4.38 0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.54-3.7 8.24-8.24 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.71 4.3 3.79.6.26 1.07.41 1.44.53.61.19 1.16.17 1.6.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.12-.22-.19-.47-.31z"/>
+    </svg>
+    <span>Orientación Médica 24/7</span>
+  </a>
+
+  <!-- Main JavaScript Module -->
+  <script type="module" src="/src/js/app.js"></script>
+</body>
+</html>
