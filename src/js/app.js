@@ -120,19 +120,21 @@ export function switchCountry(countryCode, updateUrl = true) {
 }
 
 function initCountrySelector() {
+  // 1. Generate all selector HTML from data
+  renderCountrySelectors();
+
+  // 2. Desktop dropdown toggle
   const dropdown = document.getElementById('country-dropdown');
   const triggerBtn = document.getElementById('country-trigger-btn');
   const menu = document.getElementById('country-menu');
 
   if (triggerBtn && menu) {
-    // Toggle dropdown on button click
     triggerBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       const isOpen = menu.classList.toggle('open');
       triggerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
 
-    // Close on click outside
     document.addEventListener('click', (e) => {
       if (dropdown && !dropdown.contains(e.target)) {
         menu.classList.remove('open');
@@ -140,71 +142,127 @@ function initCountrySelector() {
       }
     });
 
-    // Close on Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && menu.classList.contains('open')) {
         menu.classList.remove('open');
         triggerBtn.setAttribute('aria-expanded', 'false');
       }
     });
-
-    // Option clicks inside desktop dropdown
-    menu.querySelectorAll('.country-opt-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const code = btn.dataset.country;
-        if (code) {
-          switchCountry(code, true);
-          menu.classList.remove('open');
-          triggerBtn.setAttribute('aria-expanded', 'false');
-        }
-      });
-    });
   }
 
-  // Top Banner country switcher pills
-  document.querySelectorAll('.top-country-pill').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const code = btn.dataset.country;
-      if (code) {
-        switchCountry(code, true);
-      }
-    });
-  });
+  // 3. Delegated click handler for ALL country buttons across the page
+  //    Uses a single pattern: any [data-country] inside known containers
+  const countryContainers = [
+    document.getElementById('top-country-pills'),
+    document.getElementById('country-menu'),
+    document.getElementById('mobile-country-buttons'),
+    document.getElementById('footer-country-switcher')
+  ];
 
-  // Mobile menu country buttons
-  document.querySelectorAll('.mobile-country-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  countryContainers.forEach(container => {
+    if (!container) return;
+    container.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-country]');
+      if (!btn) return;
       e.preventDefault();
       const code = btn.dataset.country;
       if (code) {
         switchCountry(code, true);
-        const navLinks = document.querySelector('.nav-links');
-        if (navLinks) navLinks.classList.remove('open');
-      }
-    });
-  });
-
-  // Footer country buttons
-  document.querySelectorAll('.footer-country-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const code = btn.dataset.country;
-      if (code) {
-        switchCountry(code, true);
+        // Close dropdown if inside nav menu
+        if (menu && container === menu) {
+          menu.classList.remove('open');
+          triggerBtn?.setAttribute('aria-expanded', 'false');
+        }
+        // Close mobile nav if inside mobile picker
+        if (container.id === 'mobile-country-buttons') {
+          const navLinks = document.querySelector('.nav-links');
+          if (navLinks) navLinks.classList.remove('open');
+        }
       }
     });
   });
 }
 
-function updateCountrySelectorUI() {
-  // Update top banner pills
-  document.querySelectorAll('.top-country-pill').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.country === currentCountryCode);
-  });
+/**
+ * Generates HTML for all 4 country selector locations from COUNTRIES_DATA.
+ * Single source of truth — no country info hardcoded in HTML.
+ */
+function renderCountrySelectors() {
+  const countries = SUPPORTED_COUNTRIES.map(code => getCountryData(code));
 
-  // Update desktop trigger
+  // 1. Top banner pills
+  const topPills = document.getElementById('top-country-pills');
+  if (topPills) {
+    topPills.innerHTML = countries.map(c => `
+      <button class="top-country-pill ${c.code === currentCountryCode ? 'active' : ''}" 
+              data-country="${c.code}" title="Cambiar a ${c.name} (${c.currency.code})">
+        <span class="pill-flag">${c.flag}</span>
+        <span class="pill-name">${c.name}</span>
+        <span class="pill-currency">${c.currency.code}</span>
+      </button>
+    `).join('');
+  }
+
+  // 2. Desktop dropdown menu options
+  const menu = document.getElementById('country-menu');
+  if (menu) {
+    menu.innerHTML = countries.map(c => `
+      <button class="country-opt-btn ${c.code === currentCountryCode ? 'active' : ''}" data-country="${c.code}">
+        <span class="opt-flag">${c.flag}</span>
+        <div class="opt-info">
+          <span class="opt-title">${c.name}</span>
+          <span class="opt-sub">${c.selectorSubtitle || `${c.currency.code} (${c.currency.symbol})`}</span>
+        </div>
+        <span class="opt-check">✓</span>
+      </button>
+    `).join('');
+  }
+
+  // 3. Mobile nav country buttons
+  const mobileButtons = document.getElementById('mobile-country-buttons');
+  if (mobileButtons) {
+    mobileButtons.innerHTML = countries.map(c => `
+      <button class="mobile-country-btn ${c.code === currentCountryCode ? 'active' : ''}" data-country="${c.code}">
+        ${c.flag} ${c.name}
+      </button>
+    `).join('');
+  }
+
+  // 4. Footer country buttons
+  const footerSwitcher = document.getElementById('footer-country-switcher');
+  if (footerSwitcher) {
+    // Keep the existing "País:" label, append buttons
+    const existingLabel = footerSwitcher.querySelector('span');
+    const labelHTML = existingLabel ? existingLabel.outerHTML : '';
+    footerSwitcher.innerHTML = labelHTML + countries.map(c => `
+      <button class="footer-country-btn ${c.code === currentCountryCode ? 'active' : ''}" data-country="${c.code}">
+        ${c.flag} ${c.name}
+      </button>
+    `).join('');
+  }
+}
+
+/**
+ * Updates the active state across all country selectors.
+ * Uses a shared helper to avoid repeating querySelectorAll toggle loops.
+ */
+function updateCountrySelectorUI() {
+  // Helper: toggle .active for all buttons with [data-country] inside a container
+  const setActiveInContainer = (containerId) => {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.querySelectorAll('[data-country]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.country === currentCountryCode);
+    });
+  };
+
+  // Update all 4 selector locations
+  setActiveInContainer('top-country-pills');
+  setActiveInContainer('country-menu');
+  setActiveInContainer('mobile-country-buttons');
+  setActiveInContainer('footer-country-switcher');
+
+  // Update desktop trigger button face
   const flagEl = document.getElementById('nav-country-flag');
   const nameEl = document.getElementById('nav-country-name');
   const currEl = document.getElementById('nav-country-currency');
@@ -212,22 +270,8 @@ function updateCountrySelectorUI() {
   if (flagEl) flagEl.textContent = currentCountryData.flag;
   if (nameEl) nameEl.textContent = currentCountryData.name;
   if (currEl) currEl.textContent = currentCountryData.currency.code;
-
-  // Update active state in desktop dropdown
-  document.querySelectorAll('.country-opt-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.country === currentCountryCode);
-  });
-
-  // Update mobile buttons
-  document.querySelectorAll('.mobile-country-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.country === currentCountryCode);
-  });
-
-  // Update footer buttons
-  document.querySelectorAll('.footer-country-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.country === currentCountryCode);
-  });
 }
+
 
 // ==========================================
 // 2. DOM Updates for Header & Announcement
