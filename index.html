@@ -38,9 +38,9 @@
   <!-- Top Announcement Bar -->
   <div class="top-banner">
     <span class="live-dot"></span>
-    <span><strong>Médicos y enfermeros en ruta:</strong> Disponibilidad inmediata en Región Metropolitana · Tiempo promedio 35 min</span>
+    <span id="top-banner-live-text"><strong>Médicos y enfermeros en ruta:</strong> Disponibilidad inmediata en Región Metropolitana · Tiempo promedio 35 min</span>
     <span style="opacity: 0.6; margin: 0 4px;">|</span>
-    <span>¿Riesgo vital? Llama al <strong>SAMU 131</strong></span>
+    <span id="top-banner-emergency-text">¿Riesgo vital? Llama al <strong>SAMU 131</strong></span>
   </div>
 
   <!-- Header & Navigation -->
@@ -49,12 +49,21 @@
       <a href="#" class="brand-logo">
         <img src="/assets/brand/logo.png" alt="Aura Salud Logo" onerror="this.src='/favicon.svg'">
         <span>Aura<span style="color: var(--primary-400);">Salud</span></span>
-        <span class="brand-badge">Chile</span>
+        <span class="brand-badge" id="brand-country-badge">🇨🇱 Chile</span>
       </a>
 
       <nav>
         <ul class="nav-links">
+          <li class="mobile-country-picker">
+            <span class="mobile-picker-label">Seleccionar País:</span>
+            <div class="mobile-country-buttons">
+              <button class="mobile-country-btn active" data-country="cl">🇨🇱 Chile</button>
+              <button class="mobile-country-btn" data-country="ar">🇦🇷 Argentina</button>
+              <button class="mobile-country-btn" data-country="pe">🇵🇪 Perú</button>
+            </div>
+          </li>
           <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#clinicas-title">Clínicas</a></li>
           <li><a href="#como-funciona">Cómo Funciona</a></li>
           <li><a href="#pantallas-app">App en Vivo</a></li>
           <li><a href="#planes">Planes</a></li>
@@ -65,6 +74,42 @@
       </nav>
 
       <div class="nav-actions">
+        <!-- Country Selector Dropdown -->
+        <div class="country-dropdown" id="country-dropdown">
+          <button class="country-trigger-btn" id="country-trigger-btn" aria-haspopup="true" aria-expanded="false" title="Seleccionar País">
+            <span class="country-flag-icon" id="nav-country-flag">🇨🇱</span>
+            <span class="country-name-label" id="nav-country-name">Chile</span>
+            <span class="country-currency-tag" id="nav-country-currency">CLP</span>
+            <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="country-menu" id="country-menu">
+            <button class="country-opt-btn active" data-country="cl">
+              <span class="opt-flag">🇨🇱</span>
+              <div class="opt-info">
+                <span class="opt-title">Chile</span>
+                <span class="opt-sub">Pesos CLP ($) · Santiago & Regiones</span>
+              </div>
+              <span class="opt-check">✓</span>
+            </button>
+            <button class="country-opt-btn" data-country="ar">
+              <span class="opt-flag">🇦🇷</span>
+              <div class="opt-info">
+                <span class="opt-title">Argentina</span>
+                <span class="opt-sub">Pesos ARS ($) · CABA, GBA & Provincias</span>
+              </div>
+              <span class="opt-check">✓</span>
+            </button>
+            <button class="country-opt-btn" data-country="pe">
+              <span class="opt-flag">🇵🇪</span>
+              <div class="opt-info">
+                <span class="opt-title">Perú</span>
+                <span class="opt-sub">Soles PEN (S/) · Lima & Provincias</span>
+              </div>
+              <span class="opt-check">✓</span>
+            </button>
+          </div>
+        </div>
+
         <button class="btn btn-primary btn-sm" data-open-booking>
           Pedir Atención
         </button>
@@ -87,14 +132,14 @@
           <div class="hero-content">
             <div class="hero-live-pill">
               <span class="live-dot"></span>
-              <span>+40 Profesionales de salud activos hoy en Santiago</span>
+              <span id="hero-live-pill-text">+40 Profesionales de salud activos hoy en Santiago</span>
             </div>
 
             <h1 class="hero-title">
               Salud profesional a tu puerta <span class="gradient-text">en minutos</span>, no en horas
             </h1>
 
-            <p class="hero-description">
+            <p class="hero-description" id="hero-description-text">
               Médicos generales, enfermería, kinesiología, exámenes de laboratorio y ambulancias programadas directamente en tu hogar. Sin salas de espera, con receta digital inmediata y reembolso en tu Isapre o Fonasa.
             </p>
 
@@ -130,8 +175,8 @@
             <div class="floating-chip chip-top-left">
               <div class="chip-icon chip-icon-teal">👨‍⚕️</div>
               <div class="chip-info">
-                <span class="chip-title">Dra. Camila Rivera en camino</span>
-                <span class="chip-subtitle">ETA estimado: 18 minutos</span>
+                <span class="chip-title" id="hero-chip-doctor-title">Dra. Camila Rivera en camino</span>
+                <span class="chip-subtitle" id="hero-chip-doctor-eta">ETA estimado: 18 minutos</span>
               </div>
             </div>
 
@@ -139,8 +184,8 @@
             <div class="floating-chip chip-bottom-right">
               <div class="chip-icon chip-icon-emerald">✓</div>
               <div class="chip-info">
-                <span class="chip-title">Receta Electrónica Emitida</span>
-                <span class="chip-subtitle">Válida en todas las farmacias</span>
+                <span class="chip-title" id="hero-chip-recipe-title">Receta Electrónica Emitida</span>
+                <span class="chip-subtitle" id="hero-chip-recipe-desc">Válida en todas las farmacias</span>
               </div>
             </div>
 
@@ -173,29 +218,42 @@
     </section>
 
     <!-- ==========================================================================
-         Trust & Coverage Bar
+         Trust & Coverage Bar + Partner Clinics
          ========================================================================== -->
     <section class="trust-bar">
       <div class="container">
-        <div class="trust-title">Respaldo y Convenios de Reembolso</div>
+        <div class="trust-title">Respaldo y Convenios de Salud</div>
         <div class="trust-badges">
           <div class="trust-item">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span>Prestadores Acreditados SuperSalud</span>
+            <span id="trust-badge-accreditation">Prestadores Acreditados SuperSalud</span>
           </div>
           <div class="trust-item">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></svg>
-            <span>Boleta Reembolsable en Isapres y Fonasa</span>
+            <span id="trust-badge-reimbursement">Boleta Reembolsable en Isapres y Fonasa</span>
           </div>
           <div class="trust-item">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
-            <span>Pagos Seguros Webpay Plus y MercadoPago</span>
+            <span id="trust-badge-payments">Pagos Seguros Webpay Plus y MercadoPago</span>
           </div>
           <div class="trust-item">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-            <span>Ficha Médica Cifrada HIPAA Compliant</span>
+            <span id="trust-badge-privacy">Ficha Médica Cifrada HIPAA Compliant</span>
           </div>
         </div>
+
+        <!-- Dynamic Partner Clinics Subsection -->
+        <div class="clinics-section">
+          <div class="clinics-header">
+            <span class="section-tag" style="margin-bottom: 8px;">Convenios Médicos</span>
+            <h3 class="clinics-title" id="clinics-title">Red de Clínicas y Centros Médicos en Convenio</h3>
+            <p class="clinics-subtitle" id="clinics-subtitle">Centros asistenciales de referencia y derivación preferente en Chile</p>
+          </div>
+          <div class="clinics-grid" id="clinics-grid">
+            <!-- Populated dynamically by app.js based on selected country -->
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -248,7 +306,7 @@
         <div class="section-header">
           <div class="section-tag">Catálogo Clínico</div>
           <h2 class="section-title">Prestaciones Médicas <span class="gradient-text">a Domicilio</span></h2>
-          <p class="section-subtitle">Tarifas transparentes en pesos chilenos (CLP), tiempos de arribo garantizados y profesionales certificados por el MINSAL.</p>
+          <p class="section-subtitle" id="services-section-subtitle">Tarifas transparentes en pesos chilenos (CLP), tiempos de arribo garantizados y profesionales certificados por el MINSAL.</p>
         </div>
 
         <!-- Filter Buttons -->
@@ -332,7 +390,7 @@
       <div class="container">
         <div class="section-header">
           <div class="section-tag">Zonas de Atención</div>
-          <h2 class="section-title">Verifica la Cobertura en tu <span class="gradient-text">Comuna</span></h2>
+          <h2 class="section-title">Verifica la Cobertura en tu <span class="gradient-text" id="coverage-zone-type">Comuna</span></h2>
           <p class="section-subtitle">Consulta la disponibilidad de flota médica y tiempos estimados de arribo en tiempo real.</p>
         </div>
 
@@ -354,18 +412,18 @@
           </div>
 
           <div class="coverage-hub-card">
-            <span class="hub-badge">🇨🇱 Red Médica Nacional</span>
-            <h3 class="hub-title">Despacho Central Santiago & Regiones</h3>
-            <p class="hub-desc">Nuestra central monitorea la ubicación y disponibilidad del personal médico con algoritmos de ruteo óptimo para llegar a tu puerta en el menor tiempo posible.</p>
+            <span class="hub-badge" id="coverage-hub-badge">🇨🇱 Red Médica Nacional</span>
+            <h3 class="hub-title" id="coverage-hub-title">Despacho Central Santiago & Regiones</h3>
+            <p class="hub-desc" id="coverage-hub-desc">Nuestra central monitorea la ubicación y disponibilidad del personal médico con algoritmos de ruteo óptimo para llegar a tu puerta en el menor tiempo posible.</p>
 
             <div class="hub-metrics">
               <div>
-                <div class="hub-metric-val">&lt; 35 min</div>
-                <div class="hub-metric-label">Tiempo promedio zona oriente</div>
+                <div class="hub-metric-val" id="coverage-hub-metric1-val">&lt; 35 min</div>
+                <div class="hub-metric-label" id="coverage-hub-metric1-label">Tiempo promedio zona oriente</div>
               </div>
               <div>
-                <div class="hub-metric-val">24/7</div>
-                <div class="hub-metric-label">Telemedicina y triage continuo</div>
+                <div class="hub-metric-val" id="coverage-hub-metric2-val">24/7</div>
+                <div class="hub-metric-label" id="coverage-hub-metric2-label">Telemedicina y triage continuo</div>
               </div>
             </div>
 
@@ -390,11 +448,11 @@
             <div>
               <span class="section-tag" style="background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan);">Trabaja con Nosotros</span>
               <h2 style="font-size: 2.2rem; margin-bottom: 16px;">¿Eres Médico, Enfermero o Kinesiólogo?</h2>
-              <p style="font-size: 1.05rem; line-height: 1.6; margin-bottom: 24px;">
+              <p style="font-size: 1.05rem; line-height: 1.6; margin-bottom: 24px;" id="profesionales-subtitle">
                 Únete a la red de salud domiciliaria más moderna de Chile. Elige tus horarios, recibe pacientes geolocalizados cerca de ti, gestiona fichas y recetas 100% digitales y obtén pagos semanales garantizados.
               </p>
               <div style="display: flex; flex-wrap: wrap; gap: 16px;">
-                <a href="https://wa.me/56912345678?text=Hola%20Aura%20Salud%2C%20soy%20profesional%20de%20la%20salud%20y%20deseo%20postular" target="_blank" class="btn btn-primary">
+                <a href="https://wa.me/56912345678?text=Hola%20Aura%20Salud%2C%20soy%20profesional%20de%20la%20salud%20y%20deseo%20postular" target="_blank" class="btn btn-primary" id="profesionales-apply-btn">
                   Postular como Profesional
                 </a>
                 <a href="#pantallas-app" class="btn btn-secondary">
@@ -404,7 +462,7 @@
             </div>
             <div style="background: rgba(8, 14, 20, 0.7); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 24px;">
               <h4 style="font-size: 1.1rem; margin-bottom: 16px; color: var(--primary-300);">Requisitos de Acreditación:</h4>
-              <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem;">
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem;" id="profesionales-requirements-list">
                 <li style="display: flex; align-items: center; gap: 8px;">✓ Título profesional acreditado en Chile</li>
                 <li style="display: flex; align-items: center; gap: 8px;">✓ Inscripción en el Registro Nacional de Prestadores (SuperSalud)</li>
                 <li style="display: flex; align-items: center; gap: 8px;">✓ EUNACOM aprobado (médicos titulados en el extranjero)</li>
@@ -424,7 +482,7 @@
         <div class="section-header">
           <div class="section-tag">Experiencias Reales</div>
           <h2 class="section-title">Lo que dicen nuestras <span class="gradient-text">Familias</span></h2>
-          <p class="section-subtitle">Más de 15.000 hogares en Chile han confiado su salud y la de sus seres queridos en Aura.</p>
+          <p class="section-subtitle" id="testimonials-section-subtitle">Más de 15.000 hogares en Chile han confiado su salud y la de sus seres queridos en Aura.</p>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px;" id="testimonials-grid">
@@ -459,14 +517,14 @@
           <h2 style="font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 16px;">
             Atención médica de calidad, sin moverte de casa
           </h2>
-          <p style="font-size: 1.15rem; max-width: 600px; margin: 0 auto 32px; color: var(--text-secondary);">
+          <p style="font-size: 1.15rem; max-width: 600px; margin: 0 auto 32px; color: var(--text-secondary);" id="bottom-cta-subtitle">
             Solicita tu médico general, enfermera o toma de muestras ahora mismo en Santiago y Regiones.
           </p>
           <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
             <button class="btn btn-primary btn-lg" data-open-booking>
               Solicitar Atención Ahora
             </button>
-            <a href="https://wa.me/56912345678?text=Hola%20Aura%20Salud%2C%20tengo%20una%20consulta%20médica" target="_blank" class="btn btn-secondary btn-lg">
+            <a href="https://wa.me/56912345678?text=Hola%20Aura%20Salud%2C%20tengo%20una%20consulta%20médica" target="_blank" class="btn btn-secondary btn-lg" id="bottom-cta-whatsapp">
               Hablar con Orientación Médica WhatsApp
             </a>
           </div>
@@ -488,11 +546,11 @@
             <img src="/assets/brand/logo.png" alt="Aura Salud" onerror="this.src='/favicon.svg'">
             <span>Aura<span style="color: var(--primary-400);">Salud</span></span>
           </a>
-          <p>Plataforma chilena de salud y telemedicina a domicilio. Conectamos pacientes con profesionales de la salud certificados en minutos.</p>
+          <p id="footer-about-text">Plataforma chilena de salud y telemedicina a domicilio. Conectamos pacientes con profesionales de la salud certificados en minutos.</p>
           
           <div class="emergency-alert-card">
-            <h5>⚠️ Aviso de Emergencia</h5>
-            <p>Aura Salud atiende cuadros no urgentes y semi-urgentes. Ante riesgo vital inminente, comuníquese de inmediato al <strong>131 (SAMU)</strong> o acuda a un servicio de urgencias.</p>
+            <h5 id="footer-emergency-title">⚠️ Aviso de Emergencia</h5>
+            <p id="footer-emergency-desc">Aura Salud atiende cuadros no urgentes y semi-urgentes. Ante riesgo vital inminente, comuníquese de inmediato al <strong>131 (SAMU)</strong> o acuda a un servicio de urgencias.</p>
           </div>
         </div>
 
@@ -522,7 +580,7 @@
 
         <div class="footer-col">
           <h4>Acreditación & Legal</h4>
-          <ul>
+          <ul id="footer-legal-list">
             <li><span style="color: var(--text-secondary); font-size: 0.9rem;">Registro Prestadores SuperSalud</span></li>
             <li><span style="color: var(--text-secondary); font-size: 0.9rem;">Cumplimiento Ley 20.584 (Derechos y Deberes)</span></li>
             <li><span style="color: var(--text-secondary); font-size: 0.9rem;">Privacidad Cifrada Ley 19.628</span></li>
@@ -534,7 +592,16 @@
       </div>
 
       <div class="footer-bottom">
-        <div>© 2026 Aura Salud SpA. Todos los derechos reservados. Santiago de Chile.</div>
+        <div id="footer-legal-entity">© 2026 Aura Salud SpA. Todos los derechos reservados. Santiago de Chile.</div>
+        
+        <!-- Footer Country Switcher -->
+        <div class="footer-country-switcher">
+          <span style="color: var(--text-muted); font-size: 0.85rem;">País:</span>
+          <button class="footer-country-btn active" data-country="cl">🇨🇱 Chile</button>
+          <button class="footer-country-btn" data-country="ar">🇦🇷 Argentina</button>
+          <button class="footer-country-btn" data-country="pe">🇵🇪 Perú</button>
+        </div>
+
         <div style="display: flex; gap: 20px;">
           <a href="#" style="color: var(--text-muted); text-decoration: none;">Privacidad</a>
           <a href="#" style="color: var(--text-muted); text-decoration: none;">Términos</a>
@@ -588,7 +655,7 @@
         <!-- Step 2: Location & Symptoms -->
         <div class="step-pane" id="step-2">
           <div class="form-group">
-            <label class="form-label" for="booking-comuna-select">Comuna de Atención</label>
+            <label class="form-label" for="booking-comuna-select" id="booking-location-label">Comuna de Atención</label>
             <select id="booking-comuna-select" class="form-select">
               <!-- Populated by JS -->
             </select>

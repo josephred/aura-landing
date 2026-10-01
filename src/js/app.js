@@ -1,20 +1,24 @@
 /**
  * Aura Salud - Main JavaScript Controller
+ * Multi-Country Orchestrator (Chile, Argentina, Perú)
  */
 
-import { CLINICAL_SERVICES, SUBSCRIPTION_PLANS, FAQS, TESTIMONIALS } from './data.js';
+import { getCountryData, DEFAULT_COUNTRY, SUPPORTED_COUNTRIES } from './data.js';
 import { initPhoneMockup } from './phone-mockup.js';
 import { initAppShowcase } from './showcase.js';
-import { initBookingModal } from './booking-modal.js';
-import { initCoverageChecker } from './coverage.js';
+import { initBookingModal, updateBookingModalCountry } from './booking-modal.js';
+import { initCoverageChecker, updateCoverageCheckerCountry } from './coverage.js';
+
+let currentCountryCode = DEFAULT_COUNTRY;
+let currentCountryData = getCountryData(DEFAULT_COUNTRY);
+let currentServiceCategory = 'all';
+let isAnnualPricing = false;
 
 document.addEventListener('DOMContentLoaded', () => {
-  renderServices('all');
-  renderPricing(false);
-  renderFaqs();
-  renderTestimonials();
+  initCountryFromEnvironment();
   initHeader();
   initMobileMenu();
+  initCountrySelector();
   initServiceFilters();
   initPricingToggle();
   initFaqAccordion();
@@ -25,18 +29,293 @@ document.addEventListener('DOMContentLoaded', () => {
   initAppShowcase();
   initBookingModal();
   initCoverageChecker();
+
+  // Apply initial country data across all sections
+  switchCountry(currentCountryCode, false);
 });
 
 // ==========================================
-// 1. Render Services Catalog
+// 1. Country Selection & Multi-Country State
+// ==========================================
+function initCountryFromEnvironment() {
+  // Check URL query params first: ?pais=ar or ?country=pe
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramCountry = urlParams.get('pais') || urlParams.get('country');
+  
+  if (paramCountry && SUPPORTED_COUNTRIES.includes(paramCountry.toLowerCase())) {
+    currentCountryCode = paramCountry.toLowerCase();
+    currentCountryData = getCountryData(currentCountryCode);
+    return;
+  }
+
+  // Check LocalStorage next
+  const stored = localStorage.getItem('aura_country');
+  if (stored && SUPPORTED_COUNTRIES.includes(stored.toLowerCase())) {
+    currentCountryCode = stored.toLowerCase();
+    currentCountryData = getCountryData(currentCountryCode);
+    return;
+  }
+
+  currentCountryCode = DEFAULT_COUNTRY;
+  currentCountryData = getCountryData(DEFAULT_COUNTRY);
+}
+
+export function switchCountry(countryCode, updateUrl = true) {
+  if (!SUPPORTED_COUNTRIES.includes(countryCode)) return;
+
+  currentCountryCode = countryCode;
+  currentCountryData = getCountryData(countryCode);
+
+  try {
+    localStorage.setItem('aura_country', countryCode);
+  } catch (e) {
+    // Ignore storage quota or privacy mode errors
+  }
+
+  if (updateUrl && window.history && window.history.replaceState) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('pais', countryCode);
+    window.history.replaceState({}, '', url.toString());
+  }
+
+  // 1. Update Selector UI
+  updateCountrySelectorUI();
+
+  // 2. Update Header & Announcement Banner
+  updateHeaderAndBanner();
+
+  // 3. Update Hero Section
+  updateHeroSection();
+
+  // 4. Update Trust Badges & Partner Clinics
+  updateTrustAndClinics();
+
+  // 5. Update Services Catalog
+  renderServices(currentServiceCategory);
+
+  // 6. Update Pricing Plans
+  renderPricing(isAnnualPricing);
+
+  // 7. Update Coverage Section
+  updateCoverageSection();
+
+  // 8. Update Professionals Section
+  updateProfessionalsSection();
+
+  // 9. Update Testimonials
+  renderTestimonials();
+
+  // 10. Update FAQs
+  renderFaqs();
+
+  // 11. Update CTAs & WhatsApp Widgets
+  updateWhatsAppAndCTAs();
+
+  // 12. Update Footer
+  updateFooter();
+
+  // 13. Update Booking Modal
+  updateBookingModalCountry(currentCountryData);
+  updateCoverageCheckerCountry(currentCountryData);
+}
+
+function initCountrySelector() {
+  const dropdown = document.getElementById('country-dropdown');
+  const triggerBtn = document.getElementById('country-trigger-btn');
+  const menu = document.getElementById('country-menu');
+
+  if (triggerBtn && menu) {
+    // Toggle dropdown on button click
+    triggerBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = menu.classList.toggle('open');
+      triggerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+      if (dropdown && !dropdown.contains(e.target)) {
+        menu.classList.remove('open');
+        triggerBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.classList.contains('open')) {
+        menu.classList.remove('open');
+        triggerBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Option clicks inside desktop dropdown
+    menu.querySelectorAll('.country-opt-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const code = btn.dataset.country;
+        if (code) {
+          switchCountry(code, true);
+          menu.classList.remove('open');
+          triggerBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  }
+
+  // Mobile menu country buttons
+  document.querySelectorAll('.mobile-country-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const code = btn.dataset.country;
+      if (code) {
+        switchCountry(code, true);
+        const navLinks = document.querySelector('.nav-links');
+        if (navLinks) navLinks.classList.remove('open');
+      }
+    });
+  });
+
+  // Footer country buttons
+  document.querySelectorAll('.footer-country-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const code = btn.dataset.country;
+      if (code) {
+        switchCountry(code, true);
+      }
+    });
+  });
+}
+
+function updateCountrySelectorUI() {
+  // Update desktop trigger
+  const flagEl = document.getElementById('nav-country-flag');
+  const nameEl = document.getElementById('nav-country-name');
+  const currEl = document.getElementById('nav-country-currency');
+
+  if (flagEl) flagEl.textContent = currentCountryData.flag;
+  if (nameEl) nameEl.textContent = currentCountryData.name;
+  if (currEl) currEl.textContent = currentCountryData.currency.code;
+
+  // Update active state in desktop dropdown
+  document.querySelectorAll('.country-opt-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.country === currentCountryCode);
+  });
+
+  // Update mobile buttons
+  document.querySelectorAll('.mobile-country-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.country === currentCountryCode);
+  });
+
+  // Update footer buttons
+  document.querySelectorAll('.footer-country-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.country === currentCountryCode);
+  });
+}
+
+// ==========================================
+// 2. DOM Updates for Header & Announcement
+// ==========================================
+function updateHeaderAndBanner() {
+  const liveDot = document.getElementById('top-banner-live-text');
+  const emergencyText = document.getElementById('top-banner-emergency-text');
+  const brandBadge = document.getElementById('brand-country-badge');
+
+  if (liveDot) {
+    liveDot.innerHTML = `<strong>Médicos y enfermeros en ruta:</strong> ${currentCountryData.topBanner.liveText}`;
+  }
+  if (emergencyText) {
+    emergencyText.innerHTML = `${currentCountryData.topBanner.emergencyText}`;
+  }
+  if (brandBadge) {
+    brandBadge.textContent = `${currentCountryData.flag} ${currentCountryData.name}`;
+  }
+}
+
+// ==========================================
+// 3. Hero Section Updates
+// ==========================================
+function updateHeroSection() {
+  const livePill = document.getElementById('hero-live-pill-text');
+  const heroDesc = document.getElementById('hero-description-text');
+  const chipDocTitle = document.getElementById('hero-chip-doctor-title');
+  const chipDocEta = document.getElementById('hero-chip-doctor-eta');
+  const chipRecipeTitle = document.getElementById('hero-chip-recipe-title');
+  const chipRecipeDesc = document.getElementById('hero-chip-recipe-desc');
+
+  if (livePill) livePill.textContent = currentCountryData.topBanner.staffCountText;
+  if (heroDesc) heroDesc.textContent = currentCountryData.hero.subtitle;
+  if (chipDocTitle) chipDocTitle.textContent = currentCountryData.hero.chipDoctor.title;
+  if (chipDocEta) chipDocEta.textContent = currentCountryData.hero.chipDoctor.eta;
+  if (chipRecipeTitle) chipRecipeTitle.textContent = currentCountryData.hero.chipRecipe.title;
+  if (chipRecipeDesc) chipRecipeDesc.textContent = currentCountryData.hero.chipRecipe.desc;
+}
+
+// ==========================================
+// 4. Trust Badges & Partner Clinics
+// ==========================================
+function updateTrustAndClinics() {
+  const trustBadgeAccreditation = document.getElementById('trust-badge-accreditation');
+  const trustBadgeReimbursement = document.getElementById('trust-badge-reimbursement');
+  const trustBadgePayments = document.getElementById('trust-badge-payments');
+  const trustBadgePrivacy = document.getElementById('trust-badge-privacy');
+
+  if (trustBadgeAccreditation) trustBadgeAccreditation.textContent = currentCountryData.trust.accreditation;
+  if (trustBadgeReimbursement) trustBadgeReimbursement.textContent = currentCountryData.trust.reimbursement;
+  if (trustBadgePayments) trustBadgePayments.textContent = currentCountryData.trust.payments;
+  if (trustBadgePrivacy) trustBadgePrivacy.textContent = currentCountryData.trust.privacy;
+
+  const clinicsTitle = document.getElementById('clinics-title');
+  const clinicsSubtitle = document.getElementById('clinics-subtitle');
+  const clinicsGrid = document.getElementById('clinics-grid');
+
+  if (clinicsTitle) clinicsTitle.textContent = currentCountryData.clinicsLabel;
+  if (clinicsSubtitle) clinicsSubtitle.textContent = currentCountryData.clinicsSublabel;
+
+  if (clinicsGrid) {
+    clinicsGrid.innerHTML = currentCountryData.clinics.map(clinic => `
+      <div class="clinic-card">
+        <div class="clinic-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21h18"/>
+            <path d="M5 21V7l8-4v18"/>
+            <path d="M19 21V11l-6-4"/>
+            <path d="M9 9h1"/>
+            <path d="M9 13h1"/>
+            <path d="M9 17h1"/>
+          </svg>
+        </div>
+        <div class="clinic-body">
+          <div class="clinic-top-row">
+            <h4 class="clinic-name">${clinic.name}</h4>
+            <span class="clinic-badge">${clinic.badge}</span>
+          </div>
+          <span class="clinic-location">📍 ${clinic.location}</span>
+          <span class="clinic-type">${clinic.type}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+// ==========================================
+// 5. Render Services Catalog
 // ==========================================
 function renderServices(category = 'all') {
+  currentServiceCategory = category;
   const container = document.getElementById('services-grid');
+  const subtitleEl = document.getElementById('services-section-subtitle');
+
+  if (subtitleEl) {
+    subtitleEl.textContent = `Tarifas transparentes en ${currentCountryData.currency.code} (${currentCountryData.currency.symbol}), tiempos de arribo garantizados y profesionales certificados.`;
+  }
+
   if (!container) return;
 
+  const servicesList = currentCountryData.services || [];
   const filtered = category === 'all' 
-    ? CLINICAL_SERVICES 
-    : CLINICAL_SERVICES.filter(s => s.category === category);
+    ? servicesList 
+    : servicesList.filter(s => s.category === category);
 
   container.innerHTML = filtered.map(service => `
     <div class="service-card" data-category="${service.category}">
@@ -53,7 +332,7 @@ function renderServices(category = 'all') {
       <div class="service-meta-row">
         <div class="service-price-block">
           <span class="service-price-label">Tarifa Base</span>
-          <span class="service-price-val">$${service.price.toLocaleString('es-CL')} <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">CLP</span></span>
+          <span class="service-price-val">${currentCountryData.currency.formatShort(service.price)} <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">${currentCountryData.currency.code}</span></span>
         </div>
         <span class="service-eta-pill">
           ⚡ ${service.eta}
@@ -123,13 +402,16 @@ function getServiceIconSvg(name) {
 }
 
 // ==========================================
-// 2. Render Pricing Plans
+// 6. Render Pricing Plans
 // ==========================================
 function renderPricing(isAnnual = false) {
+  isAnnualPricing = isAnnual;
   const container = document.getElementById('pricing-grid');
   if (!container) return;
 
-  container.innerHTML = SUBSCRIPTION_PLANS.map(plan => {
+  const plans = currentCountryData.subscriptionPlans || [];
+
+  container.innerHTML = plans.map(plan => {
     const price = isAnnual ? plan.annualPrice : plan.monthlyPrice;
     const periodText = isAnnual ? '/año (ahorra 2 meses)' : '/mes';
 
@@ -144,8 +426,8 @@ function renderPricing(isAnnual = false) {
         </div>
 
         <div class="plan-price-wrap">
-          <span class="currency">$</span>
-          <span class="price-val">${price.toLocaleString('es-CL')}</span>
+          <span class="currency">${currentCountryData.currency.symbol}</span>
+          <span class="price-val">${price.toLocaleString()}</span>
           <span class="period">${periodText}</span>
         </div>
 
@@ -172,34 +454,83 @@ function initPricingToggle() {
   const toggleSwitch = document.getElementById('pricing-switch');
   const labelMonthly = document.getElementById('label-monthly');
   const labelAnnual = document.getElementById('label-annual');
-  let isAnnual = false;
 
   if (!toggleSwitch) return;
 
   function update() {
-    toggleSwitch.classList.toggle('annual', isAnnual);
-    if (labelMonthly) labelMonthly.classList.toggle('active', !isAnnual);
-    if (labelAnnual) labelAnnual.classList.toggle('active', isAnnual);
-    renderPricing(isAnnual);
+    toggleSwitch.classList.toggle('annual', isAnnualPricing);
+    if (labelMonthly) labelMonthly.classList.toggle('active', !isAnnualPricing);
+    if (labelAnnual) labelAnnual.classList.toggle('active', isAnnualPricing);
+    renderPricing(isAnnualPricing);
   }
 
   toggleSwitch.addEventListener('click', () => {
-    isAnnual = !isAnnual;
+    isAnnualPricing = !isAnnualPricing;
     update();
   });
 
-  if (labelMonthly) labelMonthly.addEventListener('click', () => { isAnnual = false; update(); });
-  if (labelAnnual) labelAnnual.addEventListener('click', () => { isAnnual = true; update(); });
+  if (labelMonthly) labelMonthly.addEventListener('click', () => { isAnnualPricing = false; update(); });
+  if (labelAnnual) labelAnnual.addEventListener('click', () => { isAnnualPricing = true; update(); });
 }
 
 // ==========================================
-// 3. Render FAQs & Accordion
+// 7. Coverage Section DOM Update
+// ==========================================
+function updateCoverageSection() {
+  const zoneType = document.getElementById('coverage-zone-type');
+  const hubBadge = document.getElementById('coverage-hub-badge');
+  const hubTitle = document.getElementById('coverage-hub-title');
+  const hubDesc = document.getElementById('coverage-hub-desc');
+  const hubMetric1Val = document.getElementById('coverage-hub-metric1-val');
+  const hubMetric1Label = document.getElementById('coverage-hub-metric1-label');
+  const hubMetric2Val = document.getElementById('coverage-hub-metric2-val');
+  const hubMetric2Label = document.getElementById('coverage-hub-metric2-label');
+
+  if (zoneType) zoneType.textContent = currentCountryData.zoneName;
+  if (hubBadge) hubBadge.textContent = currentCountryData.coverageHub.badge;
+  if (hubTitle) hubTitle.textContent = currentCountryData.coverageHub.title;
+  if (hubDesc) hubDesc.textContent = currentCountryData.coverageHub.desc;
+  if (hubMetric1Val) hubMetric1Val.textContent = currentCountryData.coverageHub.metric1Val;
+  if (hubMetric1Label) hubMetric1Label.textContent = currentCountryData.coverageHub.metric1Label;
+  if (hubMetric2Val) hubMetric2Val.textContent = currentCountryData.coverageHub.metric2Val;
+  if (hubMetric2Label) hubMetric2Label.textContent = currentCountryData.coverageHub.metric2Label;
+}
+
+// ==========================================
+// 8. Professionals Section Updates
+// ==========================================
+function updateProfessionalsSection() {
+  const profSubtitle = document.getElementById('profesionales-subtitle');
+  const profList = document.getElementById('profesionales-requirements-list');
+  const profApplyBtn = document.getElementById('profesionales-apply-btn');
+
+  if (profSubtitle) {
+    profSubtitle.textContent = `Únete a la red de salud domiciliaria más moderna de ${currentCountryData.name}. Elige tus horarios, recibe pacientes geolocalizados cerca de ti, gestiona fichas y recetas 100% digitales y obtén pagos semanales garantizados.`;
+  }
+
+  if (profList) {
+    profList.innerHTML = currentCountryData.professionalRequirements.map(req => `
+      <li style="display: flex; align-items: center; gap: 8px;">✓ ${req}</li>
+    `).join('');
+  }
+
+  if (profApplyBtn) {
+    const cleanPhone = currentCountryData.phone.replace(/[^0-9]/g, '');
+    const msg = encodeURIComponent(`Hola Aura Salud ${currentCountryData.name}, soy profesional de la salud y deseo postular`);
+    profApplyBtn.href = `https://wa.me/${cleanPhone}?text=${msg}`;
+  }
+}
+
+// ==========================================
+// 9. Render FAQs & Accordion
 // ==========================================
 function renderFaqs() {
   const container = document.getElementById('faq-accordion');
   if (!container) return;
 
-  container.innerHTML = FAQS.map((faq, index) => `
+  const faqs = currentCountryData.faqs || [];
+
+  container.innerHTML = faqs.map((faq, index) => `
     <div class="faq-item ${index === 0 ? 'active' : ''}">
       <button class="faq-trigger" aria-expanded="${index === 0}">
         <span>${faq.question}</span>
@@ -237,13 +568,21 @@ function initFaqAccordion() {
 }
 
 // ==========================================
-// 4. Render Testimonials
+// 10. Render Testimonials
 // ==========================================
 function renderTestimonials() {
   const container = document.getElementById('testimonials-grid');
+  const subtitleEl = document.getElementById('testimonials-section-subtitle');
+
+  if (subtitleEl) {
+    subtitleEl.textContent = `Más de 15.000 hogares en ${currentCountryData.name} han confiado su salud y la de sus seres queridos en Aura.`;
+  }
+
   if (!container) return;
 
-  container.innerHTML = TESTIMONIALS.map(t => `
+  const testimonials = currentCountryData.testimonials || [];
+
+  container.innerHTML = testimonials.map(t => `
     <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
       <div>
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
@@ -270,7 +609,53 @@ function renderTestimonials() {
 }
 
 // ==========================================
-// 5. Header Scroll & Mobile Menu
+// 11. WhatsApp Links & Bottom CTA
+// ==========================================
+function updateWhatsAppAndCTAs() {
+  const cleanPhone = currentCountryData.phone.replace(/[^0-9]/g, '');
+  const floatingBtn = document.querySelector('.floating-whatsapp-btn');
+  const bottomCtaBtn = document.getElementById('bottom-cta-whatsapp');
+  const bottomSubtitle = document.getElementById('bottom-cta-subtitle');
+
+  const defaultMsg = encodeURIComponent(`Hola Aura Salud ${currentCountryData.name}, necesito orientación médica`);
+
+  if (floatingBtn) {
+    floatingBtn.href = `https://wa.me/${cleanPhone}?text=${defaultMsg}`;
+  }
+
+  if (bottomCtaBtn) {
+    bottomCtaBtn.href = `https://wa.me/${cleanPhone}?text=${defaultMsg}`;
+  }
+
+  if (bottomSubtitle) {
+    bottomSubtitle.textContent = `Solicita tu médico clínico o general, enfermera o toma de muestras ahora mismo en ${currentCountryData.name}.`;
+  }
+}
+
+// ==========================================
+// 12. Footer Updates
+// ==========================================
+function updateFooter() {
+  const footerAbout = document.getElementById('footer-about-text');
+  const emergencyCardTitle = document.getElementById('footer-emergency-title');
+  const emergencyCardDesc = document.getElementById('footer-emergency-desc');
+  const footerLegalEntity = document.getElementById('footer-legal-entity');
+  const footerLegalList = document.getElementById('footer-legal-list');
+
+  if (footerAbout) footerAbout.textContent = currentCountryData.footer.about;
+  if (emergencyCardTitle) emergencyCardTitle.textContent = `⚠️ Aviso de Emergencia (${currentCountryData.emergency.name})`;
+  if (emergencyCardDesc) emergencyCardDesc.textContent = currentCountryData.emergency.warning;
+  if (footerLegalEntity) footerLegalEntity.textContent = currentCountryData.footer.legalEntity;
+
+  if (footerLegalList) {
+    footerLegalList.innerHTML = currentCountryData.footer.legalItems.map(item => `
+      <li><span style="color: var(--text-secondary); font-size: 0.9rem;">${item}</span></li>
+    `).join('');
+  }
+}
+
+// ==========================================
+// 13. Header Scroll & Mobile Menu
 // ==========================================
 function initHeader() {
   const header = document.querySelector('.site-header');
@@ -303,7 +688,7 @@ function initMobileMenu() {
 }
 
 // ==========================================
-// 6. Stats Counter Animation
+// 14. Stats Counter Animation
 // ==========================================
 function initStatsCounter() {
   const statNumbers = document.querySelectorAll('.stat-number');
@@ -335,10 +720,10 @@ function animateCount(element, target) {
   const timer = setInterval(() => {
     start += increment;
     if (start >= target) {
-      element.textContent = target >= 1000 ? `+${target.toLocaleString('es-CL')}` : target;
+      element.textContent = target >= 1000 ? `+${target.toLocaleString()}` : target;
       clearInterval(timer);
     } else {
-      element.textContent = Math.floor(start).toLocaleString('es-CL');
+      element.textContent = Math.floor(start).toLocaleString();
     }
   }, stepTime);
 }

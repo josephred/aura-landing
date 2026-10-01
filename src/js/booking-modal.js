@@ -1,8 +1,83 @@
 /**
  * Aura Salud - Interactive 3-Step Booking Simulator Controller
+ * Multi-Country Support: Chile (CLP), Argentina (ARS), Perú (PEN)
  */
 
-import { CLINICAL_SERVICES, COVERAGE_DATA } from './data.js';
+import { getCountryData, DEFAULT_COUNTRY } from './data.js';
+
+let activeCountryData = getCountryData(DEFAULT_COUNTRY);
+let currentStep = 1;
+let bookingData = {
+  serviceId: 'medico',
+  recipient: 'Para mí (Titular)',
+  comuna: '',
+  address: '',
+  symptoms: ''
+};
+
+export function updateBookingModalCountry(countryData) {
+  if (!countryData) return;
+  activeCountryData = countryData;
+
+  const serviceSelect = document.getElementById('booking-service-select');
+  const comunaSelect = document.getElementById('booking-comuna-select');
+  const locationLabel = document.getElementById('booking-location-label');
+
+  if (locationLabel) {
+    locationLabel.textContent = `${activeCountryData.zoneName} de Atención`;
+  }
+
+  // Populate services for the country
+  if (serviceSelect) {
+    const prevSelected = bookingData.serviceId;
+    serviceSelect.innerHTML = activeCountryData.services.map(s => 
+      `<option value="${s.id}">${activeCountryData.currency.format(s.price)} — ${s.title} (${s.eta})</option>`
+    ).join('');
+
+    const exists = activeCountryData.services.some(s => s.id === prevSelected);
+    bookingData.serviceId = exists ? prevSelected : (activeCountryData.services[0]?.id || 'medico');
+    serviceSelect.value = bookingData.serviceId;
+  }
+
+  // Populate comunas / districts for the country
+  if (comunaSelect && activeCountryData.coverage.length > 0) {
+    comunaSelect.innerHTML = activeCountryData.coverage.map(c => 
+      `<option value="${c.comuna}">${c.comuna} (${c.region}) — ETA ${c.eta}</option>`
+    ).join('');
+
+    bookingData.comuna = activeCountryData.coverage[0].comuna;
+    comunaSelect.value = bookingData.comuna;
+  }
+
+  updateSummary();
+}
+
+function updateSummary() {
+  const summaryService = document.getElementById('summary-service');
+  const summaryRecipient = document.getElementById('summary-recipient');
+  const summaryComuna = document.getElementById('summary-comuna');
+  const summaryEta = document.getElementById('summary-eta');
+  const summaryPrice = document.getElementById('summary-price');
+  const summaryCopay = document.getElementById('summary-copay');
+
+  const selectedService = activeCountryData.services.find(s => s.id === bookingData.serviceId) || activeCountryData.services[0];
+  const selectedComuna = activeCountryData.coverage.find(c => c.comuna === bookingData.comuna) || activeCountryData.coverage[0];
+
+  if (!selectedService) return;
+
+  const basePrice = selectedService.price;
+  const estimatedCopay = selectedService.copayEstimated || Math.round(basePrice * 0.35);
+
+  if (summaryService) summaryService.textContent = selectedService.title;
+  if (summaryRecipient) summaryRecipient.textContent = bookingData.recipient;
+  if (summaryComuna) summaryComuna.textContent = selectedComuna ? `${selectedComuna.comuna} (${selectedComuna.region})` : bookingData.comuna;
+  if (summaryEta) summaryEta.textContent = `⚡ ${selectedService.eta}`;
+  if (summaryPrice) summaryPrice.textContent = activeCountryData.currency.format(basePrice);
+  
+  if (summaryCopay) {
+    summaryCopay.textContent = `Aprox. ${activeCountryData.currency.format(estimatedCopay)} (${selectedService.reimbursementNote || 'según cobertura médica'})`;
+  }
+}
 
 export function initBookingModal() {
   const modal = document.getElementById('booking-modal');
@@ -24,42 +99,21 @@ export function initBookingModal() {
   const comunaSelect = document.getElementById('booking-comuna-select');
   const recipientCards = document.querySelectorAll('.radio-recipient');
 
-  const summaryService = document.getElementById('summary-service');
-  const summaryRecipient = document.getElementById('summary-recipient');
-  const summaryComuna = document.getElementById('summary-comuna');
-  const summaryEta = document.getElementById('summary-eta');
-  const summaryPrice = document.getElementById('summary-price');
-  const summaryCopay = document.getElementById('summary-copay');
-
   if (!modal) return;
 
-  let currentStep = 1;
-  let bookingData = {
-    serviceId: 'medico',
-    recipient: 'Para mí (Titular)',
-    comuna: 'Las Condes',
-    address: '',
-    symptoms: ''
-  };
+  // Initial population with default country
+  updateBookingModalCountry(activeCountryData);
 
-  // Populate service select options
+  // Service select change listener
   if (serviceSelect) {
-    serviceSelect.innerHTML = CLINICAL_SERVICES.map(s => 
-      `<option value="${s.id}">$${s.price.toLocaleString('es-CL')} — ${s.title} (${s.eta})</option>`
-    ).join('');
-
     serviceSelect.addEventListener('change', (e) => {
       bookingData.serviceId = e.target.value;
       updateSummary();
     });
   }
 
-  // Populate comuna select options
+  // Location select change listener
   if (comunaSelect) {
-    comunaSelect.innerHTML = COVERAGE_DATA.map(c => 
-      `<option value="${c.comuna}">${c.comuna} (${c.region}) — ETA ${c.eta}</option>`
-    ).join('');
-
     comunaSelect.addEventListener('change', (e) => {
       bookingData.comuna = e.target.value;
       updateSummary();
@@ -90,31 +144,14 @@ export function initBookingModal() {
 
     // Toggle navigation button visibility
     if (nextBtn1) nextBtn1.style.display = step === 1 ? 'inline-flex' : 'none';
-    
     if (backBtn2) backBtn2.style.display = step === 2 ? 'inline-flex' : 'none';
     if (nextBtn2) nextBtn2.style.display = step === 2 ? 'inline-flex' : 'none';
-
     if (backBtn3) backBtn3.style.display = step === 3 ? 'inline-flex' : 'none';
     if (finishBtn) finishBtn.style.display = step === 3 ? 'inline-flex' : 'none';
 
     if (step === 3) {
       updateSummary();
     }
-  }
-
-  function updateSummary() {
-    const selectedService = CLINICAL_SERVICES.find(s => s.id === bookingData.serviceId) || CLINICAL_SERVICES[0];
-    const selectedComuna = COVERAGE_DATA.find(c => c.comuna === bookingData.comuna) || COVERAGE_DATA[0];
-
-    const basePrice = selectedService.price;
-    const estimatedCopay = Math.round(basePrice * 0.35); // Estimado copay Isapre 65%
-
-    if (summaryService) summaryService.textContent = selectedService.title;
-    if (summaryRecipient) summaryRecipient.textContent = bookingData.recipient;
-    if (summaryComuna) summaryComuna.textContent = `${bookingData.comuna} (Región Metropolitana)`;
-    if (summaryEta) summaryEta.textContent = selectedService.eta;
-    if (summaryPrice) summaryPrice.textContent = `$${basePrice.toLocaleString('es-CL')} CLP`;
-    if (summaryCopay) summaryCopay.textContent = `Aprox. $${estimatedCopay.toLocaleString('es-CL')} CLP (según plan Isapre/Fonasa)`;
   }
 
   function openModal(preselectedServiceId = null) {
@@ -161,16 +198,17 @@ export function initBookingModal() {
 
   if (finishBtn) {
     finishBtn.addEventListener('click', () => {
-      const selectedService = CLINICAL_SERVICES.find(s => s.id === bookingData.serviceId) || CLINICAL_SERVICES[0];
+      const selectedService = activeCountryData.services.find(s => s.id === bookingData.serviceId) || activeCountryData.services[0];
       const text = encodeURIComponent(
-        `Hola Aura Salud, deseo solicitar atención médica a domicilio:\n` +
-        `• Servicio: ${selectedService.title}\n` +
+        `Hola Aura Salud ${activeCountryData.name} ${activeCountryData.flag}, deseo solicitar atención médica a domicilio:\n` +
+        `• Servicio: ${selectedService.title} (${activeCountryData.currency.format(selectedService.price)})\n` +
         `• Para: ${bookingData.recipient}\n` +
-        `• Comuna: ${bookingData.comuna}\n` +
+        `• ${activeCountryData.zoneName}: ${bookingData.comuna}\n` +
         `• Dirección: ${bookingData.address || 'Por confirmar'}\n` +
-        `• Síntomas: ${bookingData.symptoms || 'Evaluación general'}`
+        `• Síntomas/Motivo: ${bookingData.symptoms || 'Evaluación general'}`
       );
-      window.open(`https://wa.me/56912345678?text=${text}`, '_blank');
+      const cleanPhone = activeCountryData.phone.replace(/[^0-9]/g, '');
+      window.open(`https://wa.me/${cleanPhone}?text=${text}`, '_blank');
       closeModal();
     });
   }
