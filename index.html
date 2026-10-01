@@ -44,26 +44,10 @@
       <span id="top-banner-emergency-text">¿Riesgo vital? Llama al <strong>SAMU 131</strong></span>
     </div>
 
-    <!-- Modern Top Country Segmented Selector -->
+    <!-- Dynamic Top Country Segmented Selector (populated by JS) -->
     <div class="top-country-switcher" id="top-country-switcher" role="group" aria-label="Seleccionar País">
       <span class="top-country-label">País:</span>
-      <div class="top-country-pills">
-        <button class="top-country-pill active" data-country="cl" title="Cambiar a Chile (CLP)">
-          <span class="pill-flag">🇨🇱</span>
-          <span class="pill-name">Chile</span>
-          <span class="pill-currency">CLP</span>
-        </button>
-        <button class="top-country-pill" data-country="ar" title="Cambiar a Argentina (ARS)">
-          <span class="pill-flag">🇦🇷</span>
-          <span class="pill-name">Argentina</span>
-          <span class="pill-currency">ARS</span>
-        </button>
-        <button class="top-country-pill" data-country="pe" title="Cambiar a Perú (PEN)">
-          <span class="pill-flag">🇵🇪</span>
-          <span class="pill-name">Perú</span>
-          <span class="pill-currency">PEN</span>
-        </button>
-      </div>
+      <div class="top-country-pills" id="top-country-pills"></div>
     </div>
   </div>
 
@@ -80,11 +64,7 @@
         <ul class="nav-links">
           <li class="mobile-country-picker">
             <span class="mobile-picker-label">Seleccionar País:</span>
-            <div class="mobile-country-buttons">
-              <button class="mobile-country-btn active" data-country="cl">🇨🇱 Chile</button>
-              <button class="mobile-country-btn" data-country="ar">🇦🇷 Argentina</button>
-              <button class="mobile-country-btn" data-country="pe">🇵🇪 Perú</button>
-            </div>
+            <div class="mobile-country-buttons" id="mobile-country-buttons"></div>
           </li>
           <li><a href="#servicios">Servicios</a></li>
           <li><a href="#clinicas-title">Clínicas</a></li>
@@ -98,7 +78,7 @@
       </nav>
 
       <div class="nav-actions">
-        <!-- Country Selector Dropdown -->
+        <!-- Country Selector Dropdown (populated by JS) -->
         <div class="country-dropdown" id="country-dropdown">
           <button class="country-trigger-btn" id="country-trigger-btn" aria-haspopup="true" aria-expanded="false" title="Seleccionar País">
             <span class="country-flag-icon" id="nav-country-flag">🇨🇱</span>
@@ -106,32 +86,7 @@
             <span class="country-currency-tag" id="nav-country-currency">CLP</span>
             <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
-          <div class="country-menu" id="country-menu">
-            <button class="country-opt-btn active" data-country="cl">
-              <span class="opt-flag">🇨🇱</span>
-              <div class="opt-info">
-                <span class="opt-title">Chile</span>
-                <span class="opt-sub">Pesos CLP ($) · Santiago & Regiones</span>
-              </div>
-              <span class="opt-check">✓</span>
-            </button>
-            <button class="country-opt-btn" data-country="ar">
-              <span class="opt-flag">🇦🇷</span>
-              <div class="opt-info">
-                <span class="opt-title">Argentina</span>
-                <span class="opt-sub">Pesos ARS ($) · CABA, GBA & Provincias</span>
-              </div>
-              <span class="opt-check">✓</span>
-            </button>
-            <button class="country-opt-btn" data-country="pe">
-              <span class="opt-flag">🇵🇪</span>
-              <div class="opt-info">
-                <span class="opt-title">Perú</span>
-                <span class="opt-sub">Soles PEN (S/) · Lima & Provincias</span>
-              </div>
-              <span class="opt-check">✓</span>
-            </button>
-          </div>
+          <div class="country-menu" id="country-menu"></div>
         </div>
 
         <button class="btn btn-primary btn-sm" data-open-booking>
@@ -618,12 +573,9 @@
       <div class="footer-bottom">
         <div id="footer-legal-entity">© 2026 Aura Salud SpA. Todos los derechos reservados. Santiago de Chile.</div>
         
-        <!-- Footer Country Switcher -->
-        <div class="footer-country-switcher">
+        <!-- Footer Country Switcher (populated by JS) -->
+        <div class="footer-country-switcher" id="footer-country-switcher">
           <span style="color: var(--text-muted); font-size: 0.85rem;">País:</span>
-          <button class="footer-country-btn active" data-country="cl">🇨🇱 Chile</button>
-          <button class="footer-country-btn" data-country="ar">🇦🇷 Argentina</button>
-          <button class="footer-country-btn" data-country="pe">🇵🇪 Perú</button>
         </div>
 
         <div style="display: flex; gap: 20px;">
