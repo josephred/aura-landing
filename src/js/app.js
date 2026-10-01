@@ -162,6 +162,17 @@ function initCountrySelector() {
     });
   }
 
+  // Top Banner country switcher pills
+  document.querySelectorAll('.top-country-pill').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const code = btn.dataset.country;
+      if (code) {
+        switchCountry(code, true);
+      }
+    });
+  });
+
   // Mobile menu country buttons
   document.querySelectorAll('.mobile-country-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -188,6 +199,11 @@ function initCountrySelector() {
 }
 
 function updateCountrySelectorUI() {
+  // Update top banner pills
+  document.querySelectorAll('.top-country-pill').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.country === currentCountryCode);
+  });
+
   // Update desktop trigger
   const flagEl = document.getElementById('nav-country-flag');
   const nameEl = document.getElementById('nav-country-name');

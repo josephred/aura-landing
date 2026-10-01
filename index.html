@@ -35,12 +35,36 @@
     <div class="aurora-orb orb-3"></div>
   </div>
 
-  <!-- Top Announcement Bar -->
+  <!-- Top Announcement Bar with Integrated Country Switcher -->
   <div class="top-banner">
-    <span class="live-dot"></span>
-    <span id="top-banner-live-text"><strong>Médicos y enfermeros en ruta:</strong> Disponibilidad inmediata en Región Metropolitana · Tiempo promedio 35 min</span>
-    <span style="opacity: 0.6; margin: 0 4px;">|</span>
-    <span id="top-banner-emergency-text">¿Riesgo vital? Llama al <strong>SAMU 131</strong></span>
+    <div class="top-banner-content">
+      <span class="live-dot"></span>
+      <span id="top-banner-live-text"><strong>Médicos y enfermeros en ruta:</strong> Disponibilidad inmediata en Región Metropolitana · Tiempo promedio 35 min</span>
+      <span class="banner-divider">|</span>
+      <span id="top-banner-emergency-text">¿Riesgo vital? Llama al <strong>SAMU 131</strong></span>
+    </div>
+
+    <!-- Modern Top Country Segmented Selector -->
+    <div class="top-country-switcher" id="top-country-switcher" role="group" aria-label="Seleccionar País">
+      <span class="top-country-label">País:</span>
+      <div class="top-country-pills">
+        <button class="top-country-pill active" data-country="cl" title="Cambiar a Chile (CLP)">
+          <span class="pill-flag">🇨🇱</span>
+          <span class="pill-name">Chile</span>
+          <span class="pill-currency">CLP</span>
+        </button>
+        <button class="top-country-pill" data-country="ar" title="Cambiar a Argentina (ARS)">
+          <span class="pill-flag">🇦🇷</span>
+          <span class="pill-name">Argentina</span>
+          <span class="pill-currency">ARS</span>
+        </button>
+        <button class="top-country-pill" data-country="pe" title="Cambiar a Perú (PEN)">
+          <span class="pill-flag">🇵🇪</span>
+          <span class="pill-name">Perú</span>
+          <span class="pill-currency">PEN</span>
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Header & Navigation -->
